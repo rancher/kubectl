@@ -1,6 +1,6 @@
 # kubectl
 
-And that's it.
+And. That. Is. It.
 
 ## Building
 
