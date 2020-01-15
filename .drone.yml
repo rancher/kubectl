@@ -7,27 +7,48 @@ platform:
   arch: amd64
 
 steps:
-- name: docker-publish
-  image: plugins/docker
-  settings:
-    dockerfile: Dockerfile
-    password:
-      from_secret: docker_password
-    repo: "rancher/kubectl"
-    build_args:
-      - ARCH=amd64
-      - KUBERNETES_RELEASE=${DRONE_TAG}
-    tag: "${DRONE_TAG}-amd64"
-    username:
-      from_secret: docker_username
-  when:
-    instance:
-    - drone-publish.rancher.io
-    ref:
-    - refs/head/master
-    - refs/tags/*
-    event:
-    - tag
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      password:
+        from_secret: docker_password
+      repo: "rancher/kubectl"
+      build_args:
+        - ARCH=amd64
+      tag: "amd64"
+      dry_run: true
+      username:
+        from_secret: docker_username
+    when:
+      instance:
+        - drone-pr.rancher.io
+      ref:
+        - refs/pull/*/head
+      event:
+        - pull_request
+
+  - name: docker-publish
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      password:
+        from_secret: docker_password
+      repo: "rancher/kubectl"
+      build_args:
+        - ARCH=amd64
+        - KUBERNETES_RELEASE=${DRONE_TAG}
+      tag: "${DRONE_TAG}-amd64"
+      username:
+        from_secret: docker_username
+    when:
+      instance:
+        - drone-publish.rancher.io
+      ref:
+        - refs/head/master
+        - refs/tags/*
+      event:
+        - tag
 
 volumes:
 - name: docker
@@ -43,6 +64,27 @@ platform:
   arch: arm64
 
 steps:
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      password:
+        from_secret: docker_password
+      repo: "rancher/kubectl"
+      build_args:
+        - ARCH=arm64
+      tag: "arm64"
+      dry_run: true
+      username:
+        from_secret: docker_username
+    when:
+      instance:
+        - drone-pr.rancher.io
+      ref:
+        - refs/pull/*/head
+      event:
+        - pull_request
+
   - name: docker-publish
     image: plugins/docker
     settings:
@@ -79,6 +121,27 @@ platform:
   arch: arm
 
 steps:
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      password:
+        from_secret: docker_password
+      repo: "rancher/kubectl"
+      build_args:
+        - ARCH=arm
+      tag: "arm"
+      dry_run: true
+      username:
+        from_secret: docker_username
+    when:
+      instance:
+        - drone-pr.rancher.io
+      ref:
+        - refs/pull/*/head
+      event:
+        - pull_request
+
   - name: docker-publish
     image: plugins/docker
     settings:
