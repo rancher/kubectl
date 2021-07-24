@@ -2,7 +2,7 @@
 set -e
 
 : ${REPO:=rancher/kubectl}
-: ${KUBERNETES_RELEASE:=v1.17.0}
+: ${KUBERNETES_RELEASE:=v1.21.3}
 
 docker_image_build_and_push()
 {
@@ -27,8 +27,8 @@ docker_manifest_create_and_push()
 }
 
 
-docker_image_build_and_push amd64  amd64/alpine:3.11   ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
-docker_image_build_and_push arm64  arm64v8/alpine:3.11 ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
-docker_image_build_and_push arm    arm32v7/alpine:3.11 ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
+docker_image_build_and_push amd64  amd64/alpine:latest   ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
+docker_image_build_and_push arm64  arm64v8/alpine:latest ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
+docker_image_build_and_push arm    arm32v7/alpine:latest ${KUBERNETES_RELEASE} ${REPO} $(dirname $0)/.
 
 docker_manifest_create_and_push ${REPO}:${KUBERNETES_RELEASE}
