@@ -1,7 +1,7 @@
-ARG ALPINE=alpine:3.11
+ARG ALPINE=alpine:latest
 FROM ${ALPINE} AS alpine
 ARG ARCH
-ARG KUBERNETES_RELEASE=v1.17.0
+ARG KUBERNETES_RELEASE=v1.21.3
 WORKDIR /bin
 RUN set -x \
  && apk --no-cache add curl \
