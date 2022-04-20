@@ -6,17 +6,18 @@ And. That. Is. It.
 
 ```shell script
 # On amd64 ...
-docker build --build-arg ARCH=amd64 --build-arg ALPINE=amd64/alpine:3.11 --tag rancher/kubectl .
+docker build --platform amd64 --build-arg ARCH=amd64 --tag rancher/kubectl .
 ```
 
 ```shell script
 # On arm64 ...
-docker build --build-arg ARCH=arm64 --build-arg ALPINE=arm64v8/alpine:3.11 --tag rancher/kubectl .
+docker build --platform arm64 --build-arg ARCH=arm64 --tag rancher/kubectl .
 ```
 
 ```shell script
-# On arm32 ...
-docker build --build-arg ARCH=arm --build-arg ALPINE=arm32v7/alpine:3.11 --tag rancher/kubectl .
+# On s390x ...
+docker build --platform s390x --build-arg ARCH=s390x --tag rancher/kubectl .
+
 ```
 
 ## License
