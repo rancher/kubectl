@@ -114,63 +114,6 @@ volumes:
 
 ---
 kind: pipeline
-name: arm
-
-platform:
-  os: linux
-  arch: arm
-
-steps:
-  - name: docker-build
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
-        from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=arm
-      tag: "arm"
-      dry_run: true
-      username:
-        from_secret: docker_username
-    when:
-      instance:
-        - drone-pr.rancher.io
-      ref:
-        - refs/pull/*/head
-      event:
-        - pull_request
-
-  - name: docker-publish
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
-        from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=arm
-        - KUBERNETES_RELEASE=${DRONE_TAG}
-      tag: "${DRONE_TAG}-arm"
-      username:
-        from_secret: docker_username
-    when:
-      instance:
-        - drone-publish.rancher.io
-      ref:
-        - refs/head/master
-        - refs/tags/*
-      event:
-        - tag
-
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
----
-kind: pipeline
 name: s390x
 
 platform:
@@ -255,7 +198,6 @@ steps:
     platforms:
       - linux/amd64
       - linux/arm64
-      - linux/arm
       - linux/s390x
     target: "rancher/kubectl:${DRONE_TAG}"
     template: "rancher/kubectl:${DRONE_TAG}-ARCH"
@@ -271,5 +213,4 @@ steps:
 depends_on:
 - amd64
 - arm64
-- arm
 - s390x
