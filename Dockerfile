@@ -1,4 +1,4 @@
-FROM registry.suse.com/bci/bci-base:15.4.27.11.18 AS build
+FROM registry.suse.com/bci/bci-base:15.4.27.11.22 AS build
 
 ARG ARCH
 ARG KUBERNETES_RELEASE=v1.21.3
