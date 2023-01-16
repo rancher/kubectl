@@ -4,8 +4,7 @@ ARG ARCH
 ARG KUBERNETES_RELEASE=v1.21.3
 WORKDIR /bin
 RUN set -x \
- && zypper -n install curl \
- && curl -fsSLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl \
+ && curl -fsSLO https://dl.k8s.io/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl \
  && chmod +x kubectl
 RUN useradd -u 1000 -U -m kubectl
 
