@@ -17,5 +17,11 @@ docker_manifest_create_and_push()
 echo "${DOCKER_PASSWORD}" | docker login -u $DOCKER_USERNAME --password-stdin
 
 for KUBERNETES_RELEASE in $(cat versions.txt); do                                                                                                                                                                                                                                                                             
+  echo "Checking if manifest ${REPO}:${KUBERNETES_RELEASE} already exists"
+  if skopeo inspect "docker://${REPO}:${KUBERNETES_RELEASE}" >/dev/null 2>&1; then
+    echo "Manifest ${REPO}:${KUBERNETES_RELEASE} already exists, skipping"
+    continue
+  fi
+
   docker_manifest_create_and_push ${REPO}:${KUBERNETES_RELEASE}
 done
