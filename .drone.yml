@@ -7,48 +7,38 @@ platform:
   arch: amd64
 
 steps:
-  - name: docker-build
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
-        from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=amd64
-      tag: "amd64"
-      dry_run: true
-      username:
-        from_secret: docker_username
+  - name: validate-versions
+    image: rancher/dapper:v0.6.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    commands:
+    - dapper check-versions.sh
     when:
       instance:
         - drone-pr.rancher.io
-      ref:
-        - refs/pull/*/head
       event:
         - pull_request
 
-  - name: docker-publish
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
+  - name: docker-build-publish
+    image: rancher/dapper:v0.6.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    commands:
+    - dapper image-build-and-push.sh
+    environment:
+      DOCKER_PASSWORD:
         from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=amd64
-        - KUBERNETES_RELEASE=${DRONE_TAG}
-      tag: "${DRONE_TAG}-amd64"
-      username:
+      DOCKER_USERNAME:
         from_secret: docker_username
     when:
       instance:
         - drone-publish.rancher.io
       ref:
         - refs/head/master
-        - refs/tags/*
       event:
-        - tag
+        - push
 
 volumes:
 - name: docker
@@ -64,48 +54,25 @@ platform:
   arch: arm64
 
 steps:
-  - name: docker-build
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
+  - name: docker-build-publish
+    image: rancher/dapper:v0.6.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    commands:
+    - dapper image-build-and-push.sh
+    environment:
+      DOCKER_PASSWORD:
         from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=arm64
-      tag: "arm64"
-      dry_run: true
-      username:
-        from_secret: docker_username
-    when:
-      instance:
-        - drone-pr.rancher.io
-      ref:
-        - refs/pull/*/head
-      event:
-        - pull_request
-
-  - name: docker-publish
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      password:
-        from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=arm64
-        - KUBERNETES_RELEASE=${DRONE_TAG}
-      tag: "${DRONE_TAG}-arm64"
-      username:
+      DOCKER_USERNAME:
         from_secret: docker_username
     when:
       instance:
         - drone-publish.rancher.io
       ref:
         - refs/head/master
-        - refs/tags/*
       event:
-        - tag
+        - push
 
 volumes:
   - name: docker
@@ -124,54 +91,25 @@ node:
   arch: s390x
 
 steps:
-  - name: docker-build
-    image: rancher/drone-images:docker-s390x
+  - name: docker-build-publish
+    image: rancher/dapper:v0.6.0
     volumes:
       - name: docker
         path: /var/run/docker.sock
-    settings:
-      dockerfile: Dockerfile
-      password:
+    commands:
+    - dapper image-build-and-push.sh
+    environment:
+      DOCKER_PASSWORD:
         from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=s390x
-      tag: "s390x"
-      dry_run: true
-      username:
-        from_secret: docker_username
-    when:
-      instance:
-        - drone-pr.rancher.io
-      ref:
-        - refs/pull/*/head
-      event:
-        - pull_request
-
-  - name: docker-publish
-    image: rancher/drone-images:docker-s390x
-    volumes:
-      - name: docker
-        path: /var/run/docker.sock
-    settings:
-      dockerfile: Dockerfile
-      password:
-        from_secret: docker_password
-      repo: "rancher/kubectl"
-      build_args:
-        - ARCH=s390x
-        - KUBERNETES_RELEASE=${DRONE_TAG}
-      tag: "${DRONE_TAG}-s390x"
-      username:
+      DOCKER_USERNAME:
         from_secret: docker_username
     when:
       instance:
         - drone-publish.rancher.io
       ref:
         - refs/head/master
-        - refs/tags/*
       event:
-        - tag
+        - push
 
 volumes:
   - name: docker
@@ -189,26 +127,29 @@ platform:
 
 steps:
 - name: manifest
-  image: plugins/manifest:1.0.2
-  settings:
-    username:
-      from_secret: docker_username
-    password:
+  image: rancher/dapper:v0.6.0
+  volumes:
+    - name: docker
+      path: /var/run/docker.sock
+  commands:
+  - dapper manifest-create-and-push.sh
+  environment:
+    DOCKER_PASSWORD:
       from_secret: docker_password
-    platforms:
-      - linux/amd64
-      - linux/arm64
-      - linux/s390x
-    target: "rancher/kubectl:${DRONE_TAG}"
-    template: "rancher/kubectl:${DRONE_TAG}-ARCH"
+    DOCKER_USERNAME:
+      from_secret: docker_username
   when:
     instance:
-    - drone-publish.rancher.io
+      - drone-publish.rancher.io
     ref:
-    - refs/head/master
-    - refs/tags/*
+      - refs/head/master
     event:
-    - tag
+      - push
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
 
 depends_on:
 - amd64

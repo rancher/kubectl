@@ -2,32 +2,26 @@
 
 And. That. Is. It.
 
-## Building
+## Adding new versions
 
-```shell script
-# On amd64 ...
-docker build --platform amd64 --build-arg ARCH=amd64 --tag rancher/kubectl .
-```
+The source for the versions to create the images is in `versions.txt`. You can manually add entries to it or use the [GitHub Actions workflow](./.github/workflows/add-new-versions.yml) to automatically lookup new versions and create a pull request.
 
-```shell script
-# On arm64 ...
-docker build --platform arm64 --build-arg ARCH=arm64 --tag rancher/kubectl .
-```
+Scripts live in the `./scripts` directory:
 
-```shell script
-# On s390x ...
-docker build --platform s390x --build-arg ARCH=s390x --tag rancher/kubectl .
-
-```
+- `add-new-versions.sh`: Checks GitHub releases for `kubernetes/kubernetes` with a version regex, checks if the image already exists, and if not, adds it to `versions.txt`.
+- `check-versions.sh`: Checks if the binaries exists for all architectures for versions in `versions.txt`.
+- `image-build-and-push.sh`: Checks if image already exists, if not, build and push it.
+- `manifest-create-and-push.sh`: After all images for all architectures are created, create a manifest for all architectures and push.
 
 ## License
-Copyright (c) 2020 [Rancher Labs, Inc.](http://rancher.com)
+
+Copyright © 2020 - 2023 SUSE LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
