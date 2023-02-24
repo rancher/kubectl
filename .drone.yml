@@ -2,6 +2,9 @@
 kind: pipeline
 name: amd64
 
+concurrency:
+  limit: 1
+
 platform:
   os: linux
   arch: amd64
@@ -49,6 +52,9 @@ volumes:
 kind: pipeline
 name: arm64
 
+concurrency:
+  limit: 1
+
 platform:
   os: linux
   arch: arm64
@@ -82,6 +88,9 @@ volumes:
 ---
 kind: pipeline
 name: s390x
+
+concurrency:
+  limit: 1
 
 platform:
   os: linux
