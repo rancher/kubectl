@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euxo pipefail
 RELEASES=$(gh api graphql -F owner='kubernetes' -F name='kubernetes' -f query='query($name: String!, $owner: String!) {repository(owner: $owner, name: $name) {releases(first: 100) {nodes { tagName, isPrerelease }} }}' | jq -r '.data.repository.releases.nodes[] | select(.isPrerelease != true) | .tagName' | sort -V)
 # Including v1.20 to v1.39
 INCLUDE_VERSIONS="v1\.[2-3][0-9]\.[0-9]+"
