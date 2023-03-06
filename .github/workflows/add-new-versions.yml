@@ -17,8 +17,10 @@ jobs:
         id: run
         run: |
           bash scripts/add-new-versions.sh > add-new-versions.output
-          new_versions=$(grep ^Added add-new-versions.output)
-          echo "new_versions=${new_versions}" >> $GITHUB_OUTPUT
+          if grep -q ^Added add-new-versions.output; then
+            new_versions=$(grep ^Added add-new-versions.output)
+            echo "new_versions=${new_versions}" >> $GITHUB_OUTPUT
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for repository changes
