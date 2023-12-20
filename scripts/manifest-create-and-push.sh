@@ -3,7 +3,7 @@ set -e
 
 : ${REPO:=rancher/kubectl}
 
-archs="amd64 arm64 s390x"
+archs="amd64 arm64"
 
 docker_manifest_create_and_push()
 {
