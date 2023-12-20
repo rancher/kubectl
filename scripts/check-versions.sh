@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-archs="amd64 arm64 s390x"
+archs="amd64 arm64"
 
 for release in $(cat versions.txt); do
   for arch in $archs; do

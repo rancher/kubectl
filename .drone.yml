@@ -87,47 +87,6 @@ volumes:
 
 ---
 kind: pipeline
-name: s390x
-
-concurrency:
-  limit: 1
-
-platform:
-  os: linux
-  arch: amd64
-
-node:
-  arch: s390x
-
-steps:
-  - name: docker-build-publish
-    image: rancher/dapper:v0.6.0
-    volumes:
-      - name: docker
-        path: /var/run/docker.sock
-    commands:
-    - dapper image-build-and-push.sh
-    environment:
-      DOCKER_PASSWORD:
-        from_secret: docker_password
-      DOCKER_USERNAME:
-        from_secret: docker_username
-    when:
-      instance:
-        - drone-publish.rancher.io
-      ref:
-        - "refs/heads/master"
-      event:
-        - push
-
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
----
-
-kind: pipeline
 name: manifest
 
 platform:
@@ -163,4 +122,3 @@ volumes:
 depends_on:
 - amd64
 - arm64
-- s390x
