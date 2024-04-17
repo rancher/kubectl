@@ -1,5 +1,5 @@
 name: Validate PR
-on: [pull_request, workflow_dispatch]
+on: [pull_request]
 jobs:
   validate-versions:
     name: "Check kubectl release versions"
