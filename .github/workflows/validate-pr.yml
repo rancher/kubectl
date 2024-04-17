@@ -1,0 +1,10 @@
+name: Validate PR
+on: [pull_request]
+jobs:
+  validate-versions:
+    name: "Check kubectl release versions"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: scripts/check-versions.sh
