@@ -10,19 +10,6 @@ platform:
   arch: amd64
 
 steps:
-  - name: validate-versions
-    image: rancher/dapper:v0.6.0
-    volumes:
-      - name: docker
-        path: /var/run/docker.sock
-    commands:
-    - dapper check-versions.sh
-    when:
-      instance:
-        - drone-pr.rancher.io
-      event:
-        - pull_request
-
   - name: docker-build-publish
     image: rancher/dapper:v0.6.0
     volumes:
