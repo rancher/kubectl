@@ -1,0 +1,64 @@
+name: Clean PR Branch
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'status/auto-created')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - name: Check PR branch exists
+        id: check-branch
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            try {
+              let {status: status} = await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "heads/${{ github.event.pull_request.head.ref }}"
+              })
+              if (status == 200) {
+                await core.summary
+                  .addHeading("PR Branch Found", 2)
+                  .addRaw("The PR branch was found and will be cleaned up.")
+                  .write();
+              } else {
+
+                core.setFailed("Branch not found, nothing to clean. (failure can be ignored)");
+              }
+            }
+            catch (err) {
+              if (err.response && err.response.status === 404) {
+                await core.summary
+                  .addHeading("PR Branch Not Found", 2)
+                  .addRaw("The PR branch didn't exist; the action failure can be ignored.")
+                  .write();
+                core.setFailed("Branch not found, nothing to clean. (failure can be ignored)");
+              } else {
+                core.setFailed(`Action failed with error ${err}`);
+              }
+            }
+      - name: Delete the PR branch
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            try {
+              let {status: status} = github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "heads/${{ github.event.pull_request.head.ref }}"
+              })
+              await core.summary
+                .addHeading("PR Branch Deleted", 2)
+                .addRaw("The PR's branch `${{ github.event.pull_request.head.ref }}` was deleted.")
+                .write();
+            }
+            catch (err) {
+              // setFailed logs the message and sets a failing exit code
+              core.setFailed(`Action failed with error ${err}`);
+            }

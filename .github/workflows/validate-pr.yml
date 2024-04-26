@@ -1,5 +1,6 @@
 name: Validate PR
 on:
+  workflow_call:
   pull_request:
   pull_request_review:
     types: [ submitted ]
@@ -9,5 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - run: scripts/check-versions.sh
