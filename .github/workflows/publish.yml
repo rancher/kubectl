@@ -88,6 +88,8 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_REPO }}:${{ matrix.version }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            KUBERNETES_RELEASE=${{ matrix.version }}
       - name: Get CPU Arch hashes
         run: |
           docker manifest inspect ${{ env.IMAGE_REPO }}:${{ matrix.version }} | jq --raw-output '.manifests[]
