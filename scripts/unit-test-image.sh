@@ -46,12 +46,18 @@ fi
 
 echo "Testing run..."
 OUT=$(docker run --rm "$IMAGE_NAME" version --client=true)
-if [[ $OUT =~ .*${VERSION}.* ]]; then
+RUN_RES=$?
+if [[ $RUN_RES -eq 0 && $OUT =~ .*${VERSION}.* ]]; then
   echo "PASS: Expected version found in output."
   exit 0
 fi
 
-echo "FAIL: Expected version not found in output."
+if [[ $RUN_RES -ne 0 ]]; then
+  echo "FAIL: Cannot find image for Expected version (${VERSION})."
+  exit 1
+fi
+
+echo "FAIL: Expected version (${VERSION}) not found in output."
 echo "Output Found:"
 echo "$OUT"
 exit 1
