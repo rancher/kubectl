@@ -70,7 +70,7 @@ jobs:
         with:
           images: ${{ env.IMAGE_REPO }}
       - name: Build image
-        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6.0.1
         id: build-image
         with:
           context: .
@@ -120,7 +120,7 @@ jobs:
         with:
           images: ${{ env.IMAGE_REPO }}
       - name: Build and push
-        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6.0.1
         id: build-push
         with:
           context: .
