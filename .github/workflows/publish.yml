@@ -6,7 +6,7 @@ on:
       - 'master'
     paths:
       - 'versions.txt'
-      - '.github/workflows'
+      - '.github/workflows/*'
       - 'package/Dockerfile'
 
 env:
