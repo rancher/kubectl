@@ -1,4 +1,4 @@
-FROM registry.suse.com/bci/bci-base:15.5 AS build
+FROM registry.suse.com/bci/bci-base:15.6 AS build
 
 ARG TARGETPLATFORM
 ARG KUBERNETES_RELEASE=v1.21.3
