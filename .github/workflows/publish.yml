@@ -6,7 +6,7 @@ on:
       - 'master'
     paths:
       - 'versions.txt'
-      - '.github/workflows'
+      - '.github/workflows/*'
       - 'package/Dockerfile'
 
 env:
@@ -48,6 +48,9 @@ jobs:
           echo "value=${JSON}" >> "$GITHUB_OUTPUT"
           echo "Found ${NEW_COUNT} new kubectl versions to build" >> $GITHUB_STEP_SUMMARY
   image-prebuild-validate:
+    permissions:
+      contents: read
+      id-token: write # this is important, it's how we authenticate with Vault
     needs:
       - image-prebuild
     name: Prebuild and Validate kubectl versions
