@@ -4,7 +4,9 @@ ARG TARGETPLATFORM
 ARG KUBERNETES_RELEASE=v1.21.3
 WORKDIR /bin
 RUN set -x \
- && curl -fsSLO https://dl.k8s.io/release/${KUBERNETES_RELEASE}/bin/${TARGETPLATFORM}/kubectl \
+ && curl -fsSLO "https://dl.k8s.io/release/${KUBERNETES_RELEASE}/bin/${TARGETPLATFORM}/kubectl" \
+ && curl -LO "https://dl.k8s.io/release/${KUBERNETES_RELEASE}/bin/${TARGETPLATFORM}/kubectl.sha256" \
+ && echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check \
  && chmod +x kubectl
 RUN useradd -u 1000 -U -m kubectl
 
