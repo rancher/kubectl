@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - run: scripts/check-versions.sh
   image-prebuild:
     needs:
@@ -29,7 +29,7 @@ jobs:
       matrix: ${{ steps.new-versions.outputs.value }}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - name: Find existing images
         id: existing-version
         run: |
@@ -60,7 +60,7 @@ jobs:
         version: ${{fromJSON(needs.image-prebuild.outputs.matrix)}}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3.6.1
       - name: "Read some Secrets"
@@ -105,7 +105,7 @@ jobs:
         version: ${{fromJSON(needs.image-prebuild.outputs.matrix)}}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3.6.1
       - name: "Read some Secrets"
