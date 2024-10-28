@@ -4,6 +4,10 @@ on:
   pull_request:
   pull_request_review:
     types: [ submitted ]
+
+env:
+  IMAGE_REPO: ${{ github.repository }}
+
 jobs:
   validate-versions:
     name: "Check kubectl release versions"
@@ -12,3 +16,23 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: scripts/check-versions.sh
+      - name: Find newest kubectl version
+        run: |
+          newest=$(head -n 1 versions.txt)
+          echo "KUBECTL_VERSION=$newest" >> $GITHUB_ENV
+      - name: Build image
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        id: build-image
+        with:
+          context: .
+          file: package/Dockerfile
+          platforms: "linux/amd64"
+          push: false
+          load: true
+          tags: ${{ env.IMAGE_REPO }}:${{ env.KUBECTL_VERSION }}-pr
+          build-args: |
+            KUBERNETES_RELEASE=${{ env.KUBECTL_VERSION }}
+      - name: Unit test image
+        run: scripts/unit-test-image.sh ${{ env.KUBECTL_VERSION }}-pr
+        env:
+          REPO: ${{ env.IMAGE_REPO }}
