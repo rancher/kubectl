@@ -55,6 +55,7 @@ jobs:
       - image-prebuild
     name: Prebuild and Validate kubectl versions
     runs-on: ubuntu-latest
+    if: ${{ needs.image-prebuild.outputs.matrix && needs.image-prebuild.outputs.matrix != '[]' }}
     strategy:
       matrix:
         version: ${{fromJSON(needs.image-prebuild.outputs.matrix)}}
@@ -100,6 +101,7 @@ jobs:
       - image-prebuild-validate
     name: Build and push Image(s)
     runs-on: ubuntu-latest
+    if: ${{ needs.image-prebuild.outputs.matrix && needs.image-prebuild.outputs.matrix != '[]' }}
     strategy:
       matrix:
         version: ${{fromJSON(needs.image-prebuild.outputs.matrix)}}
