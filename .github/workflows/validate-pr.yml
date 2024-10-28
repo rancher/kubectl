@@ -32,7 +32,7 @@ jobs:
           tags: ${{ env.IMAGE_REPO }}:${{ env.KUBECTL_VERSION }}-pr
           build-args: |
             KUBERNETES_RELEASE=${{ env.KUBECTL_VERSION }}
-            - name: Unit test image
-            run: scripts/unit-test-image.sh ${{ env.KUBECTL_VERSION }}-pr
-            env:
-              REPO: ${{ env.IMAGE_REPO }}
+      - name: Unit test image
+        run: scripts/unit-test-image.sh ${{ env.KUBECTL_VERSION }}-pr
+        env:
+          REPO: ${{ env.IMAGE_REPO }}
