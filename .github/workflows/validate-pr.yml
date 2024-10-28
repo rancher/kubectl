@@ -21,18 +21,18 @@ jobs:
           newest=$(head -n 1 versions.txt)
           echo "KUBECTL_VERSION=$newest" >> $GITHUB_ENV
       - name: Build image
-      uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
-      id: build-image
-      with:
-        context: .
-        file: package/Dockerfile
-        platforms: "linux/amd64"
-        push: false
-        load: true
-        tags: ${{ env.IMAGE_REPO }}:${{ env.KUBECTL_VERSION }}-pr
-        build-args: |
-          KUBERNETES_RELEASE=${{ env.KUBECTL_VERSION }}
-          - name: Unit test image
-          run: scripts/unit-test-image.sh ${{ env.KUBECTL_VERSION }}-pr
-          env:
-            REPO: ${{ env.IMAGE_REPO }}
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        id: build-image
+        with:
+          context: .
+          file: package/Dockerfile
+          platforms: "linux/amd64"
+          push: false
+          load: true
+          tags: ${{ env.IMAGE_REPO }}:${{ env.KUBECTL_VERSION }}-pr
+          build-args: |
+            KUBERNETES_RELEASE=${{ env.KUBECTL_VERSION }}
+            - name: Unit test image
+            run: scripts/unit-test-image.sh ${{ env.KUBECTL_VERSION }}-pr
+            env:
+              REPO: ${{ env.IMAGE_REPO }}
