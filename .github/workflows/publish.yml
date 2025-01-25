@@ -77,7 +77,7 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
       - name: Build image
-        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc # v6.11.0
+        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
         id: build-image
         with:
           context: .
@@ -128,7 +128,7 @@ jobs:
         with:
           images: ${{ env.IMAGE_REPO }}
       - name: Build and push
-        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc # v6.11.0
+        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
         id: build-push
         with:
           context: .
