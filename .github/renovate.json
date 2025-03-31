@@ -11,6 +11,6 @@
     "dockerfile",
     "github-actions",
     "helm-values",
-    "regex"
+    "custom.regex"
   ]
 }
