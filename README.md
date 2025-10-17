@@ -2,6 +2,12 @@
 
 And. That. Is. It.
 
+> [!WARNING]
+> This image was an internal component of various Rancher Projects and has recently been deprecated.
+> Any external consumers of this image should migrate to another image, like the [Kubectl image from AppCo](https://apps.rancher.io/applications/kubectl).
+> 
+> For Rancher projects we are migrating to `rancher/kuberlr-kubectl` based image, for assistance reach out to Team ORBS.
+
 ## Adding new versions
 
 1. `Add new versions` workflow will create a PR,
